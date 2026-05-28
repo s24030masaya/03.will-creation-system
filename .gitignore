@@ -1,0 +1,29 @@
+# Python / Flask backend
+backend/venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Node / React frontend
+node_modules/
+frontend/node_modules/
+/build
+/dist
+
+# Generated wills (personal data - do not commit)
+backend/data/wills/*
+!backend/data/wills/.gitkeep
+
+# Environment / secrets
+.env
+.env.local
+*.env
+*.key
+*.pem
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
