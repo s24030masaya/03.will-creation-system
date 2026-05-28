@@ -21,9 +21,9 @@ It is the most technically complete of the three thesis apps, demonstrating an e
 
 ```
 ┌────────────────────┐        REST API        ┌─────────────────────┐
-│   React frontend    │  ───────────────────▶  │   Flask backend      │
-│   (forms, preview)  │  ◀───────────────────  │   (logic, PDF gen)   │
-└────────────────────┘        JSON / PDF       └─────────────────────┘
+│   React frontend   │  ───────────────────▶  │   Flask backend     │
+│   (forms, preview) │  ◀───────────────────  │   (logic, PDF gen)  │
+└────────────────────┘        JSON / PDF      └─────────────────────┘
 ```
 
 ## Tech Stack
