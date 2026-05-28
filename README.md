@@ -1,225 +1,103 @@
-# 遺言書作成システム
+# Will Creation Support System
 
-遺言書の作成と管理をサポートするWebアプリケーションです。
+A full-stack web application that guides users through drafting a will and generates a formatted PDF document. Built as the flagship component of a master's thesis decision-support platform on proactive inheritance planning, this app pairs a React front end with a Python/Flask REST API.
 
-## 主な機能
+## Overview
 
-### 1. 遺言者情報
-- 氏名と住所の登録
-- 遺言書のヘッダーと末尾に自動反映
+Creating a valid, well-structured will requires gathering and organizing a range of information — heirs, executors, real estate, bank accounts, securities, and more. This application breaks that process into clear, guided forms, assembles the data through a REST API, and produces a ready-to-review PDF.
 
-### 2. 相続人管理
-- 複数の相続人を追加・編集・削除
-- 続柄（夫、妻、長男、長女など）と生年月日の管理
-- カレンダーUI（1970年1月からスタート）
+It is the most technically complete of the three thesis apps, demonstrating an end-to-end full-stack architecture with a clear separation between client and server.
 
-### 3. 遺産管理
-- **不動産（土地・建物）**:
-  - 地図で住所を選択可能（市町村名+地区名のみ表示）
-  - 所在と地番の入力（地番は任意）
-  - 地番不明時の注意書き自動表示
-  - 個別の編集・削除機能
+## Features
 
-- **銀行預金**:
-  - 一般銀行とゆうちょ銀行に対応
-  - ゆうちょ銀行：記号・番号の専用入力
-  - 複数口座の管理
-  - 個別の編集・削除機能
+- Guided, multi-section data entry (heirs, executor, real estate, bank accounts, securities)
+- Map-based selection for property-related entries
+- Live preview of the will as the user fills in details
+- Server-side PDF generation of the finished document
+- List view of previously created wills
+- Clean REST API separating the React front end from the Flask back end
 
-- **有価証券**:
-  - 上場株式：証券会社、支店、口座番号、個別銘柄または全部指定
-  - 非上場株式：会社名、本店所在地、株数
-  - 複数証券会社・銘柄の管理
-  - 個別の編集・削除機能
+## Architecture
 
-### 4. 上記以外の財産
-- 記載されていない財産を相続する人を指定
-- プレビューに自動的に条文を生成
+```
+┌────────────────────┐        REST API        ┌─────────────────────┐
+│   React frontend    │  ───────────────────▶  │   Flask backend      │
+│   (forms, preview)  │  ◀───────────────────  │   (logic, PDF gen)   │
+└────────────────────┘        JSON / PDF       └─────────────────────┘
+```
 
-### 5. 遺言執行者設定
-- 相続人から選択または新規入力
-- 相続人選択時は続柄のみ表示（住所・生年月日不要）
-- 執行者の権限を自動的に条文化
+## Tech Stack
 
-### 6. データ管理
-- JSONファイルで複数の遺言書を保存
-- 遺言書一覧からの選択・編集
-- 自動バックアップ機能
+| Layer | Technology |
+|-------|------------|
+| Frontend | React |
+| Backend | Python, Flask |
+| API | REST (JSON) |
+| Documents | Server-side PDF generation |
 
-### 7. プレビュー・出力
-- 正式な遺言書フォーマットでプレビュー表示
-- 和暦変換（昭和・平成・令和）
-- PDF形式でのダウンロード
-- 条文番号の自動採番
+## Getting Started
 
-## 技術スタック
+Prerequisites: [Python 3](https://www.python.org/) and [Node.js](https://nodejs.org/).
 
-### バックエンド
-- Python 3.8+
-- Flask
-- ReportLab (PDF生成)
-
-### フロントエンド
-- React
-- Leaflet.js (地図機能)
-- Axios (API通信)
-
-## セットアップ
-
-### 1. バックエンドのセットアップ
+### 1. Start the backend
 
 ```bash
-cd backend
+cd will-creation-system/backend
 
-# 仮想環境を作成（推奨）
+# Create and activate a virtual environment
 python -m venv venv
+venv\Scripts\activate        # Windows
+# source venv/bin/activate   # macOS / Linux
 
-# 仮想環境を有効化
-# Windows:
-venv\Scripts\activate
-# macOS/Linux:
-source venv/bin/activate
-
-# 依存パッケージをインストール
+# Install dependencies
 pip install -r requirements.txt
 
-# サーバーを起動
+# Run the server
 python app.py
 ```
 
-バックエンドサーバーは `http://localhost:5000` で起動します。
-
-### 2. フロントエンドのセットアップ
+### 2. Start the frontend (in a new terminal)
 
 ```bash
-cd frontend
+cd will-creation-system/frontend
 
-# 依存パッケージをインストール
+# Install dependencies
 npm install
 
-# 開発サーバーを起動
+# Start the development server
 npm start
 ```
 
-フロントエンドは `http://localhost:3000` で起動します。
+The React app will open in your browser and communicate with the Flask API.
 
-## 使い方
-
-### 1. 新規遺言書の作成
-
-1. トップページで「新規作成」ボタンをクリック
-2. 「編集」タブで相続人を追加
-3. 遺産（不動産、銀行預金、有価証券）を追加
-4. 遺言執行者を設定
-5. 「保存」ボタンで保存
-
-### 2. 不動産の住所入力
-
-- 「地図で住所を選択」ボタンをクリック
-- 地図上で該当位置をクリック
-- 住所が自動的に入力されます
-
-### 3. 遺言書のプレビューとダウンロード
-
-1. 「プレビュー」タブに移動
-2. 「プレビュー生成」ボタンで遺言書テキストを表示
-3. 「PDFダウンロード」ボタンでPDF形式でダウンロード
-
-### 4. 保存済み遺言書の編集
-
-1. 「遺言書一覧」タブで編集したい遺言書をクリック
-2. 「編集」タブで内容を編集
-3. 「保存」ボタンで更新
-
-## ファイル構造
+## Project Structure
 
 ```
 will-creation-system/
 ├── backend/
-│   ├── app.py                 # Flaskアプリケーション
-│   ├── models.py              # データモデル
-│   ├── routes.py              # APIエンドポイント
-│   ├── will_generator.py      # 遺言書テキスト生成
-│   ├── pdf_generator.py       # PDF生成
-│   ├── requirements.txt       # Python依存パッケージ
+│   ├── app.py              # Flask entry point
+│   ├── routes.py           # REST API endpoints
+│   ├── models.py           # Data models
+│   ├── will_generator.py   # Will assembly logic
+│   ├── pdf_generator.py    # PDF output
+│   ├── requirements.txt
 │   └── data/
-│       └── wills/             # 遺言書データ保存先
-├── frontend/
-│   ├── public/
-│   │   └── index.html
-│   ├── src/
-│   │   ├── components/        # Reactコンポーネント
-│   │   ├── App.js             # メインアプリケーション
-│   │   ├── App.css            # スタイルシート
-│   │   └── index.js
-│   ├── package.json
-│   └── .gitignore
-└── README.md
+│       └── wills/          # Generated wills (ignored by Git)
+└── frontend/
+    ├── public/
+    └── src/
+        ├── App.js
+        └── components/      # HeirForm, ExecutorForm, RealEstateForm,
+                             # BankAccountForm, SecuritiesForm,
+                             # MapSelector, WillPreview, WillList
 ```
 
-## API エンドポイント
+> Note: Generated wills may contain personal information and are excluded from version control via `.gitignore`.
 
-### 遺言書管理
+## About This Project
 
-- `GET /api/wills` - 遺言書一覧取得
-- `GET /api/wills/<id>` - 特定の遺言書取得
-- `POST /api/wills` - 遺言書作成
-- `PUT /api/wills/<id>` - 遺言書更新
-- `DELETE /api/wills/<id>` - 遺言書削除
+This is the flagship of three apps that together form the decision-support platform built for my master's thesis at the Kobe Institute of Computing (2024–2026). The other two components are an [inheritance dispute risk predictor](https://github.com/s24030masaya/01.inheritance-predictor) and a [real-estate valuation tool](https://github.com/s24030masaya/02.real-estate-valuation).
 
-### 遺言書生成
+## License
 
-- `POST /api/wills/<id>/generate` - 遺言書テキスト生成
-- `GET /api/wills/<id>/pdf` - PDF生成・ダウンロード
-
-## データ形式
-
-遺言書データはJSON形式で保存されます：
-
-```json
-{
-  "id": "uuid",
-  "created_at": "2026-01-06T10:00:00",
-  "updated_at": "2026-01-06T10:00:00",
-  "heirs": [
-    {
-      "relationship": "妻",
-      "name": "山田花子",
-      "birth_date": "1960-05-15"
-    }
-  ],
-  "allocations": [
-    {
-      "heir_index": 0,
-      "land": {...},
-      "building": {...},
-      "bank_accounts": [...],
-      "securities": [...]
-    }
-  ],
-  "executor": {
-    "address": "東京都...",
-    "name": "田中太郎",
-    "birth_date": "1970-03-20"
-  }
-}
-```
-
-## 注意事項
-
-- このシステムは遺言書作成の補助ツールです
-- 法的効力を持つ遺言書を作成するには、専門家（弁護士、司法書士など）にご相談ください
-- 重要なデータは定期的にバックアップしてください
-
-## ライセンス
-
-MIT License
-
-## 今後の拡張案
-
-- ユーザー認証機能
-- データベース対応（SQLite/PostgreSQL）
-- クラウドストレージ連携
-- 遺言書テンプレート機能
-- 印刷プレビュー機能
-- 多言語対応
+Released for portfolio and educational purposes.
